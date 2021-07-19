@@ -1,0 +1,29 @@
+{
+  "name": "talos-backend",
+  "version": "1.0.0",
+  "main": "bin/index.js",
+  "license": "MIT",
+  "scripts": {
+    "build": "tsc",
+    "start": "tsc && node ./bin/index.js",
+    "dev": "ts-node ./src/index.ts",
+    "test": "jest --coverage --verbose"
+  },
+  "dependencies": {
+    "@types/sqlite3": "^3.1.7",
+    "install": "^0.13.0",
+    "npm": "^7.19.1",
+    "sqlite3": "^5.0.2",
+    "typescript": "^4.3.5"
+  },
+  "devDependencies": {
+    "@types/jest": "^26.0.23",
+    "@types/node": "^15.14.0",
+    "@types/rewire": "^2.5.28",
+    "babel-jest": "^27.0.6",
+    "babel-plugin-rewire": "^1.2.0",
+    "jest": "^27.0.6",
+    "rewire": "^5.0.0",
+    "ts-jest": "^27.0.3"
+  }
+}
