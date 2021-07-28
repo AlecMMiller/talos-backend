@@ -1,4 +1,4 @@
-import { teamId } from "./id"
+import { teamId } from "./id";
 
 export interface IMatchResultsSummary {
     WinPoints: number

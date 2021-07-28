@@ -1,4 +1,4 @@
-const sqlite3 = require('sqlite3').verbose();
+import sqlite3 = require("sqlite3")
 
 interface IColumnDef {
   name: string
@@ -15,11 +15,11 @@ export interface ITableDef {
 function generateCreate(definition: ITableDef): string {
   let sql = `INSERT INTO ${definition.name} (`;
   definition.columns.forEach(column => {
-    sql += `${column.name}, `
+    sql += `${column.name}, `;
   });
   sql = sql.slice(0, -2);
-  const questionMarks = '?, '.repeat(definition.columns.length).slice(0, -2)
-  sql += `)\nVALUES (${questionMarks})`
+  const questionMarks = "?, ".repeat(definition.columns.length).slice(0, -2);
+  sql += `)\nVALUES (${questionMarks})`;
   return sql;
 }
 
@@ -40,15 +40,15 @@ export class Database {
     return new Promise((resolve, reject) => {
       this.db.run(sql, params, function (err: Error) {
         if (err) {
-          console.log('Error running sql ' + sql)
-          console.log(err)
-          reject(err)
+          console.log("Error running sql " + sql);
+          console.log(err);
+          reject(err);
         } else {
           //@ts-ignore
           resolve(this.lastID);
         }
-      })
-    })
+      });
+    });
   }
 
   async getById(id: number, table: string): Promise<any> {
@@ -57,28 +57,28 @@ export class Database {
     return new Promise((resolve, reject) => {
       this.db.get(sql, [id], (err: Error, result: any) => {
         if (err) {
-          console.log('Error running sql: ' + sql)
-          console.log(err)
-          reject(err)
+          console.log("Error running sql: " + sql);
+          console.log(err);
+          reject(err);
         } else {
-          resolve(result)
+          resolve(result);
         }
-      })
-    })
+      });
+    });
   }
 
   async getMultiple(sql: string, params = []): Promise<any[]> {
     return new Promise((resolve, reject) => {
       this.db.all(sql, params, (err: Error, result: any[]) => {
         if (err) {
-          console.log('Error running sql: ' + sql)
-          console.log(err)
-          reject(err)
+          console.log("Error running sql: " + sql);
+          console.log(err);
+          reject(err);
         } else {
-          resolve(result)
+          resolve(result);
         }
-      })
-    })
+      });
+    });
   }
 }
 
@@ -89,7 +89,7 @@ export class BaseDAO {
   createSql: string;
 
   constructor(db: Database, definition: any) {
-    console.log(`Creating database instance for ${definition.name}`)
+    console.log(`Creating database instance for ${definition.name}`);
     this.table = definition.name;
     this.#definition = definition;
     this.#db = db;
@@ -97,28 +97,28 @@ export class BaseDAO {
   }
 
   async createTable() {
-    let sql = `CREATE TABLE IF NOT EXISTS ${this.table} (\n\tid INTEGER PRIMARY KEY AUTOINCREMENT,\n`
+    let sql = `CREATE TABLE IF NOT EXISTS ${this.table} (\n\tid INTEGER PRIMARY KEY AUTOINCREMENT,\n`;
     this.#definition.columns.forEach(column => {
-      sql += `\t${column.name} ${column.type}`
+      sql += `\t${column.name} ${column.type}`;
       if (column.constraints) {
-        sql += ` ${column.constraints}`
+        sql += ` ${column.constraints}`;
       }
-      sql += ",\n"
+      sql += ",\n";
     });
 
     this.#definition.columns.forEach(column => {
       if (column.fk) {
-        sql += `\tFOREIGN KEY (${column.name}) REFERENCES ${column.fk}(id),\n`
+        sql += `\tFOREIGN KEY (${column.name}) REFERENCES ${column.fk}(id),\n`;
       }
     });
     sql = sql.slice(0, -2);
-    sql += `\n)`
+    sql += "\n)";
 
     await this.run(sql);
   }
 
   async drop() {
-    const sql = `DROP TABLE IF EXISTS ${this.table}`
+    const sql = `DROP TABLE IF EXISTS ${this.table}`;
     await this.run(sql);
   }
 

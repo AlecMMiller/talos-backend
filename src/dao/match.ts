@@ -1,9 +1,9 @@
 import { BaseDAO, Database } from "./base";
-import { matchId, allianceId } from "../interfaces/id"
+import { matchId, allianceId } from "../interfaces/id";
 import { AllianceTableName } from "./alliance";
 import { ITableDef } from "./base";
 
-export const MatchTableName = 'match';
+export const MatchTableName = "match";
 
 interface IMatchDao {
     matchId?: matchId
@@ -12,23 +12,23 @@ interface IMatchDao {
 }
 
 const definition: ITableDef = {
-    name: MatchTableName,
-    columns: [
-        { name: "redAlliance", type: "INTEGER", fk: AllianceTableName },
-        { name: "blueAlliance", type: "INTEGER", fk: AllianceTableName}
-    ]
-}
+  name: MatchTableName,
+  columns: [
+    { name: "redAlliance", type: "INTEGER", fk: AllianceTableName },
+    { name: "blueAlliance", type: "INTEGER", fk: AllianceTableName}
+  ]
+};
 
 export default class MatchDAO extends BaseDAO{
-    constructor(db: Database) {
-        super(db, definition);
-    }
+  constructor(db: Database) {
+    super(db, definition);
+  }
 
-    async create(match: IMatchDao){
-        return this.run(this.createSql, [match.redAlliance, match.blueAlliance]);
-    }
+  async create(match: IMatchDao){
+    return this.run(this.createSql, [match.redAlliance, match.blueAlliance]);
+  }
 
-    async getMatchById(matchId: matchId): Promise<IMatchDao> {
-        return this.getById(matchId);
-    }
+  async getMatchById(matchId: matchId): Promise<IMatchDao> {
+    return this.getById(matchId);
+  }
 }

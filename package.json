@@ -7,7 +7,8 @@
     "build": "tsc",
     "start": "tsc && node ./bin/index.js",
     "dev": "ts-node ./src/index.ts",
-    "test": "jest --coverage --verbose"
+    "test": "jest --coverage --verbose",
+    "lint": "eslint src --fix"
   },
   "dependencies": {
     "@types/sqlite3": "^3.1.7",
@@ -20,8 +21,11 @@
     "@types/jest": "^26.0.23",
     "@types/node": "^15.14.0",
     "@types/rewire": "^2.5.28",
+    "@typescript-eslint/eslint-plugin": "^4.28.5",
+    "@typescript-eslint/parser": "^4.28.5",
     "babel-jest": "^27.0.6",
     "babel-plugin-rewire": "^1.2.0",
+    "eslint": "^7.31.0",
     "jest": "^27.0.6",
     "rewire": "^5.0.0",
     "ts-jest": "^27.0.3"

@@ -1,4 +1,4 @@
-import { teamId, matchId } from "./id"
+import { teamId, matchId } from "./id";
 
 export interface ITeamMeta {
     teamId?: teamId
