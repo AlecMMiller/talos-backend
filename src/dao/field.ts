@@ -1,31 +1,24 @@
-import { BaseDAO, Database } from "./base";
+import { BaseDAO, Database, ITableDef } from "./base";
 import { IField } from "../interfaces/field";
 import { FieldPoolTableName } from "./field-pool"; 
 
 export const FieldTableName = 'field';
 
+const definition: ITableDef = {
+    name: FieldTableName,
+    columns: [
+        {name: "poolId", type: "INTEGER", fk: FieldPoolTableName},
+        {name: "name", type: "TEXT"}
+    ]
+}
+
 export class FieldDAO extends BaseDAO{
     constructor(db: Database) {
-        super(db, FieldTableName);
-    }
-
-    async createTable() {
-        const sql = `
-        CREATE TABLE IF NOT EXISTS ${this.table} (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            poolId INTEGER,
-            name TEXT,
-            FOREIGN KEY (poolID) REFERENCES ${FieldPoolTableName})`
-        await this.run(sql);
+        super(db, definition);
     }
 
     async create(field: IField){
-        console.log(`Creating entry for team ${field.name}`)
-        const sql = `
-        INSERT INTO ${this.table} (name, poolId)
-        VALUES (?, ?)`
-
-        return this.run(sql, [field.name, field.poolId]);
+        return this.run(this.createSql, [field.poolId, field.name]);
     }
 
     async getFieldById(id: number): Promise<IField>{

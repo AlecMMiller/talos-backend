@@ -19,11 +19,11 @@ const db_name = "test.db"
 const fs = require('fs')
 fs.writeFile(db_name, '', function(){console.log('Deleted')})
 
-let database = new Database(db_name);
+const database = new Database(db_name);
 
-let teamDao = new TeamDAO(database);
-let allianceDao = new AllianceDao(database);
-let matchDao = new MatchDAO(database);
+const teamDao = new TeamDAO(database);
+const allianceDao = new AllianceDao(database);
+const matchDao = new MatchDAO(database);
 let matchScoreDao = new MatchScoreDAO(database);
 let allianceScoreDAO = new AllianceScoreDAO(database);
 let teamScoreMetaDAO = new TeamScoreMetaDAO(database);

@@ -2,6 +2,7 @@ import { BaseDAO, Database } from "./base";
 import { matchId, matchScoreId, allianceScoreId } from "../interfaces/id"
 import { MatchTableName } from "./match";
 import { AllianceScoreTableName } from "./allianceScore";
+import { ITableDef } from "./base";
 
 export const MatchScoreTableName = 'matchScore';
 
@@ -13,32 +14,23 @@ interface IMatchScoreDao {
     blueAlliance: allianceScoreId
 }
 
+const definition: ITableDef = {
+    name: MatchScoreTableName,
+    columns: [
+        {name: "matchId", type: "INTEGER", fk: MatchTableName},
+        {name: "scoredAt", type: "INTEGER"},
+        {name: "redAlliance", type: "INTEGER", fk: AllianceScoreTableName},
+        {name: "blueAlliance", type: "INTEGER", fk: AllianceScoreTableName}
+    ]
+}
+
 export class MatchScoreDAO extends BaseDAO{
     constructor(db: Database) {
-        super(db, MatchScoreTableName);
-    }
-
-    async createTable() {
-        console.log(`Creating table ${this.table}`)
-        const sql = `
-        CREATE TABLE IF NOT EXISTS ${this.table} (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            matchId INTEGER,
-            scoredAt INTEGER,
-            redAlliance INTEGER,
-            blueAlliance INTEGER,
-            FOREIGN KEY (matchId) REFERENCES ${MatchTableName}(id)
-            FOREIGN KEY (redAlliance) REFERENCES ${AllianceScoreTableName}(id),
-            FOREIGN KEY (blueAlliance) REFERENCES ${AllianceScoreTableName}(id))`
-        await this.run(sql);
+        super(db, definition);
     }
 
     async create(matchScore: IMatchScoreDao){
-        const sql = `
-        INSERT INTO ${this.table} (matchId, scoredAt, redAlliance, blueAlliance)
-        VALUES (?, ?, ?, ?)`
-
-        return this.run(sql, [matchScore.matchId, matchScore.scoredAt, matchScore.redAlliance, matchScore.blueAlliance]);
+        return this.run(this.createSql, [matchScore.matchId, matchScore.scoredAt, matchScore.redAlliance, matchScore.blueAlliance]);
     }
 
     async getMatchScoreById(matchId: matchId): Promise<IMatchScoreDao> {

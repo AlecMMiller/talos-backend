@@ -1,5 +1,28 @@
 const sqlite3 = require('sqlite3').verbose();
 
+interface IColumnDef {
+  name: string
+  type: string
+  constraints?: string
+  fk?: string
+}
+
+export interface ITableDef {
+  name: string
+  columns: IColumnDef[]
+}
+
+function generateCreate(definition: ITableDef): string {
+  let sql = `INSERT INTO ${definition.name} (`;
+  definition.columns.forEach(column => {
+    sql += `${column.name}, `
+  });
+  sql = sql.slice(0, -2);
+  const questionMarks = '?, '.repeat(definition.columns.length).slice(0, -2)
+  sql += `)\nVALUES (${questionMarks})`
+  return sql;
+}
+
 export class Database {
   db: any;
 
@@ -61,12 +84,37 @@ export class Database {
 
 export class BaseDAO {
   #db: Database;
-  table: string
+  table: string;
+  #definition: ITableDef;
+  createSql: string;
 
-  constructor(db: Database, table: string) {
-    console.log(`Creating database instance for ${table}`)
-    this.table = table;
+  constructor(db: Database, definition: any) {
+    console.log(`Creating database instance for ${definition.name}`)
+    this.table = definition.name;
+    this.#definition = definition;
     this.#db = db;
+    this.createSql = generateCreate(definition);
+  }
+
+  async createTable() {
+    let sql = `CREATE TABLE IF NOT EXISTS ${this.table} (\n\tid INTEGER PRIMARY KEY AUTOINCREMENT,\n`
+    this.#definition.columns.forEach(column => {
+      sql += `\t${column.name} ${column.type}`
+      if (column.constraints) {
+        sql += ` ${column.constraints}`
+      }
+      sql += ",\n"
+    });
+
+    this.#definition.columns.forEach(column => {
+      if (column.fk) {
+        sql += `\tFOREIGN KEY (${column.name}) REFERENCES ${column.fk}(id),\n`
+      }
+    });
+    sql = sql.slice(0, -2);
+    sql += `\n)`
+
+    await this.run(sql);
   }
 
   async drop() {
