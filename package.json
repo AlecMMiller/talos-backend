@@ -10,6 +10,9 @@
     "test": "jest --coverage --verbose",
     "lint": "eslint src --fix"
   },
+  "pre-commit": [
+    "lint"
+  ],
   "dependencies": {
     "@types/sqlite3": "^3.1.7",
     "install": "^0.13.0",
@@ -27,6 +30,7 @@
     "babel-plugin-rewire": "^1.2.0",
     "eslint": "^7.31.0",
     "jest": "^27.0.6",
+    "pre-commit": "^1.2.2",
     "rewire": "^5.0.0",
     "ts-jest": "^27.0.3"
   }
