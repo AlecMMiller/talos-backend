@@ -1,4 +1,5 @@
-import sqlite3 = require("sqlite3")
+const sqlite3 = require("sqlite3");
+//import sqlite3 = require("sqlite3")
 
 interface IColumnDef {
   name: string
