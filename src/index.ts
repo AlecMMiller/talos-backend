@@ -3,8 +3,8 @@ import AllianceDao from "./dao/alliance";
 import MatchDAO from "./dao/match";
 import { Database } from "./dao/base";
 import { IAlliance, IMatch } from "./interfaces/match";
-import { MatchDatabase } from "./database/match";
-import { ScoreDatabase } from "./database/score";
+import { MatchDatabase } from "./repo/match";
+import { ScoreDatabase } from "./repo/score";
 import { MatchScoreDAO } from "./dao/matchScore";
 import { AllianceScoreDAO } from "./dao/allianceScore";
 import { TeamScoreMetaDAO } from "./dao/teamScoreMeta";
@@ -12,7 +12,7 @@ import { FieldDAO } from "./dao/field";
 import { IMatchScore, IAllianceScore, IAllianceMeta, ITeamMeta } from "./interfaces/score";
 import { getMatchSummary } from "./helpers/ranking";
 import { FieldPoolDAO } from "./dao/field-pool";
-import { FieldDatabase } from "./database/field";
+import { FieldDatabase } from "./repo/field";
 import fs = require("fs")
 
 const db_name = "test.db";
